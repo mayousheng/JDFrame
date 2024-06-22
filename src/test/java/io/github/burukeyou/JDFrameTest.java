@@ -22,24 +22,31 @@ public class JDFrameTest {
     static List<Student> studentList = new ArrayList<>();
 
     static {
-        studentList.add(new Student(1,"a","一中","一年级",11, new BigDecimal(1)));
-        studentList.add(new Student(2,"a","一中","一年级",11, new BigDecimal(1)));
-        studentList.add(new Student(1,"d","二中","一年级",14, new BigDecimal(4)));
-        studentList.add(new Student(1,"b","一中","三年级",12, new BigDecimal(2)));
-        studentList.add(new Student(1,"c","二中","一年级",13, new BigDecimal(3)));
-        studentList.add(new Student(6,"e","三中","一年级",14, new BigDecimal(5)));
-        studentList.add(new Student(7,"e","三中","二年级",14, new BigDecimal(5)));
-        studentList.add(new Student(8,"e","三中","二年级",14, new BigDecimal(5)));
-        studentList.add(new Student(9,"e","三中","三年级",15, new BigDecimal(5)));
-        studentList.add(new Student(9,"e","三中","二年级",15, new BigDecimal(5)));
-        studentList.add(new Student(9,"e","三中","二年级",16, new BigDecimal(5)));
+        studentList.add(new Student(1, "a", "一中", "一年级", 11, new BigDecimal(1)));
+        studentList.add(new Student(2, "a", "一中", "一年级", 11, new BigDecimal(1)));
+        studentList.add(new Student(1, "d", "二中", "一年级", 14, new BigDecimal(4)));
+        studentList.add(new Student(1, "b", "一中", "三年级", 12, new BigDecimal(2)));
+        studentList.add(new Student(1, "c", "二中", "一年级", 13, new BigDecimal(3)));
+        studentList.add(new Student(6, "e", "三中", "一年级", 14, new BigDecimal(5)));
+        studentList.add(new Student(7, "e", "三中", "二年级", 14, new BigDecimal(5)));
+        studentList.add(new Student(8, "e", "三中", "二年级", 14, new BigDecimal(5)));
+        studentList.add(new Student(9, "e", "三中", "三年级", 15, new BigDecimal(5)));
+        studentList.add(new Student(9, "e", "三中", "二年级", 15, new BigDecimal(5)));
+        studentList.add(new Student(9, "e", "三中", "二年级", 16, new BigDecimal(5)));
+    }
+
+    @Test
+    public void withIndex() {
+        JDFrame.read(studentList).forEachDoWithIndex((student, index) -> System.out.println("index = " + index + ";student = " + student));
+        JDFrame.read(studentList).mapWithIndex((student, index) -> "index = " + index + "; student = " + student.getName()).forEachDo(System.out::println);
+
     }
 
     /**
      *
      */
     @Test
-    public void testDistinct(){
+    public void testDistinct() {
         List<Student> students = SDFrame.read(studentList).distinct().toLists(); // 根据对象hashCode去重
         List<Student> students1 = SDFrame.read(studentList).distinct(Student::getSchool).toLists(); // 根据学校名去重
         List<Student> students2 = SDFrame.read(studentList).distinct(e -> e.getSchool() + e.getLevel()).toLists(); // 根据学校名拼接级别去重复
@@ -48,20 +55,20 @@ public class JDFrameTest {
 
 
         SDFrame.read(studentList)
-                .whereBetween(Student::getAge,3,6) // 过滤年龄在[3，6]岁的
-                .whereBetweenR(Student::getAge,3,6) // 过滤年龄在(3，6]岁的, 不含3岁
-                .whereBetweenL(Student::getAge,3,6)      // 过滤年龄在[3，6)岁的, 不含6岁
+                .whereBetween(Student::getAge, 3, 6) // 过滤年龄在[3，6]岁的
+                .whereBetweenR(Student::getAge, 3, 6) // 过滤年龄在(3，6]岁的, 不含3岁
+                .whereBetweenL(Student::getAge, 3, 6)      // 过滤年龄在[3，6)岁的, 不含6岁
                 .whereNotNull(Student::getName) // 过滤名字不为空的数据， 兼容了空字符串''的判断
-                .whereGt(Student::getAge,3)    // 过滤年龄大于3岁
-                .whereGe(Student::getAge,3)   // 过滤年龄大于等于3岁
-                .whereLt(Student::getAge,3)  // 过滤年龄小于3岁的
-                .whereIn(Student::getAge, Arrays.asList(3,7,8)) // 过滤年龄为3岁 或者7岁 或者 8岁的数据
-                .whereNotIn(Student::getAge, Arrays.asList(3,7,8)) // 过滤年龄不为为3岁 或者7岁 或者 8岁的数据
-                .whereEq(Student::getAge,3) // 过滤年龄等于3岁的数据
-                .whereNotEq(Student::getAge,3) // 过滤年龄不等于3岁的数据
-                .whereLike(Student::getName,"jay") // 模糊查询，等价于 like "%jay%"
-                .whereLikeLeft(Student::getName,"jay") // 模糊查询，等价于 like "jay%"
-                .whereLikeRight(Student::getName,"jay"); // 模糊查询，等价于 like "%jay"
+                .whereGt(Student::getAge, 3)    // 过滤年龄大于3岁
+                .whereGe(Student::getAge, 3)   // 过滤年龄大于等于3岁
+                .whereLt(Student::getAge, 3)  // 过滤年龄小于3岁的
+                .whereIn(Student::getAge, Arrays.asList(3, 7, 8)) // 过滤年龄为3岁 或者7岁 或者 8岁的数据
+                .whereNotIn(Student::getAge, Arrays.asList(3, 7, 8)) // 过滤年龄不为为3岁 或者7岁 或者 8岁的数据
+                .whereEq(Student::getAge, 3) // 过滤年龄等于3岁的数据
+                .whereNotEq(Student::getAge, 3) // 过滤年龄不等于3岁的数据
+                .whereLike(Student::getName, "jay") // 模糊查询，等价于 like "%jay%"
+                .whereLikeLeft(Student::getName, "jay") // 模糊查询，等价于 like "jay%"
+                .whereLikeRight(Student::getName, "jay"); // 模糊查询，等价于 like "%jay"
 
 
     }
@@ -100,7 +107,7 @@ public class JDFrameTest {
     }
 
     @Test
-    public void testJoin(){
+    public void testJoin() {
 
         System.out.println("======== 矩阵1 =======");
 
@@ -111,7 +118,7 @@ public class JDFrameTest {
         // 获取学生年龄在9到16岁的学学校合计分数最高的前10名
         SDFrame<FI2<String, BigDecimal>> sdf2 = SDFrame.read(studentList)
                 .whereNotNull(Student::getAge)
-                .whereBetween(Student::getAge,9,16)
+                .whereBetween(Student::getAge, 9, 16)
                 .groupBySum(Student::getSchool, Student::getScore)
                 .sortDesc(FI2::getC2)
                 .cutFirst(10);
@@ -123,11 +130,10 @@ public class JDFrameTest {
         List<FI2<String, BigDecimal>> fi2s = sdf2.toLists();
 
 
-
         Map<String, FI2<String, BigDecimal>> collect = fi2s.stream().collect(Collectors.toMap(FI2::getC1, e -> e));
         for (Student student : studentList2) {
             FI2<String, BigDecimal> key = collect.get(student.getSchool());
-            if (key != null){
+            if (key != null) {
 
             }
         }
@@ -146,8 +152,8 @@ public class JDFrameTest {
     }
 
     @Test
-    public void testComun(){
-       // SDFrame<Student> students = SDFrame.read(studentList).mapPercent(Student::getScore,Student::setScore,2);
+    public void testComun() {
+         SDFrame<Student> students = SDFrame.read(studentList).mapPercent(Student::getScore,Student::setScore,2);
 
         SDFrame<Student> df = SDFrame.read(studentList);
         Student head = df.head();
@@ -165,7 +171,7 @@ public class JDFrameTest {
     }
 
     @Test
-    public void testAddCol(){
+    public void testAddCol() {
         SDFrame<Student> df = SDFrame.read(studentList);
 
         //List<FT2<Student, Integer>> ft2s = df.addRankingSameCol(Comparator.comparing(Student::getAge)).toLists();
@@ -181,12 +187,12 @@ public class JDFrameTest {
     @Test
     public void testRead() {
         // 枚举
-        String  a = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String a = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         char[] chars = a.toCharArray();
         for (int i = 0; i < chars.length; i++) {
             for (int j = 0; j < chars.length; j++) {
                 String s = chars[i] + String.valueOf(chars[j]);
-                System.out.println(  "SDFrame<"  + s + "<String,Integer>>");
+                System.out.println("SDFrame<" + s + "<String,Integer>>");
             }
         }
 
@@ -196,9 +202,9 @@ public class JDFrameTest {
     public void testSum() {
         JDFrame<Student> frame = JDFrame.read(studentList);
         Student s1 = frame.max(Student::getAge);// 获取年龄最大的学生
-        Integer s2  = frame.maxValue(Student::getAge);      // 获取学生里最大的年龄
+        Integer s2 = frame.maxValue(Student::getAge);      // 获取学生里最大的年龄
         Student s3 = frame.min(Student::getAge);// 获取年龄最小的学生
-        Integer s4  = frame.minValue(Student::getAge);      // 获取学生里最小的年龄
+        Integer s4 = frame.minValue(Student::getAge);      // 获取学生里最小的年龄
         BigDecimal s5 = frame.avg(Student::getAge); // 获取所有学生的年龄的平均值
         BigDecimal s6 = frame.sum(Student::getAge); // 获取所有学生的年龄合计
         MaxMin<Student> s7 = frame.maxMin(Student::getAge); // 同时获取年龄最大和最小的学生
@@ -207,7 +213,7 @@ public class JDFrameTest {
     }
 
     @Test
-    public void testGroup(){
+    public void testGroup() {
         JDFrame<Student> frame = JDFrame.read(studentList);
         // 等价于 select school,sum(age) ... group by school
         List<FI2<String, BigDecimal>> a = frame.groupBySum(Student::getSchool, Student::getAge).toLists();
@@ -236,7 +242,7 @@ public class JDFrameTest {
     }
 
     @Test
-    public void testSort(){
+    public void testSort() {
         // 等价于 order by age desc
         SDFrame.read(studentList).sortDesc(Student::getAge);
         //  等价于 order by age desc, level asc
@@ -247,20 +253,20 @@ public class JDFrameTest {
         SDFrame.read(studentList).sortAsc(Comparator.comparing(e -> e.getLevel() + e.getId()));
 
         // 等价于 select round(score*100,2) from student
-        SDFrame<Student> map2 = SDFrame.read(studentList).mapPercent(Student::getScore, Student::setScore,2);
+        SDFrame<Student> map2 = SDFrame.read(studentList).mapPercent(Student::getScore, Student::setScore, 2);
     }
 
     @Test
-    public void testReplenish(){
-        List<String> allDim = Arrays.asList("一中","二中","三中","四中");
+    public void testReplenish() {
+        List<String> allDim = Arrays.asList("一中", "二中", "三中", "四中");
         //SDFrame.read(studentList).replenish(Student::getSchool,allDim,(school) -> new Student(school)).show(30);
 
-        SDFrame.read(studentList).replenish(Student::getSchool,Student::getLevel,(school,level) -> new Student(school,level)).show(30);
+        SDFrame.read(studentList).replenish(Student::getSchool, Student::getLevel, (school, level) -> new Student(school, level)).show(30);
     }
 
 
     @Test
-    public void testOver(){
+    public void testOver() {
 
         List<Student> students1 = studentList.subList(3, 5);
         System.out.println();
@@ -306,7 +312,7 @@ public class JDFrameTest {
 
         //sdFrame.overMaxValue(Student::getAge).show(30);
 
-        sdFrame.overMaxValueS(Student::setId,Student::getAge).show(30);
+        sdFrame.overMaxValueS(Student::setId, Student::getAge).show(30);
 
         //rank.forEachDo(e -> System.out.println(e));
 
@@ -325,10 +331,10 @@ public class JDFrameTest {
     }
 
     @Test
-    public void testAddCol2(){
+    public void testAddCol2() {
         JDFrame.read(studentList)
                 //.addRowNumberCol()
-                .addRowNumberCol(Sorter.sortDescBy(Student::getAge),Student::setRank)
+                .addRowNumberCol(Sorter.sortDescBy(Student::getAge), Student::setRank)
                 //.addRowNumberCol(Student::setRank)
                 //.addRowNumberCol(Sorter.sortAscBy(Student::getAge),Student::setRank)
                 //.addRowNumberCol(Sorter.sortAscBy(Student::getAge))
